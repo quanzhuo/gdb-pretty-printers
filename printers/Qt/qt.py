@@ -13,8 +13,13 @@ import time
 from datetime import datetime
 from enum import Enum
 
-import qtcreator_debugger as qtcD
-from helper import *
+try:
+    from . import qtcreator_debugger as qtcD
+    from .helper import *
+except ImportError:
+    # Fallback for when the script is loaded directly or directory is in sys.path
+    import qtcreator_debugger as qtcD
+    from helper import *
 
 # opt-in to new ValuePrinter for collection types to allow direct querying of sizes where appropriate
 # see also: https://sourceware.org/gdb/current/onlinedocs/gdb.html/Pretty-Printing-API.html
