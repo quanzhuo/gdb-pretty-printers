@@ -54,8 +54,8 @@ python check("stack", r'QStack<QString> \(size = 3\)')
 # QString (Multi-byte)
 python check("str2", r'\"你好，Qt\"')
 
-# QStringList
-python check("qStringList", r'QStringList<QString> \(size = 3\)')
+# QStringList (Qt5: QStringList<QString>, Qt6: QList<QString>)
+python check("qStringList", r'(QStringList<QString>|QList<QString>) \(size = 3\)')
 
 # QVariant
 python check("variantInt", r'QVariant\(int, 42\)')
@@ -68,8 +68,8 @@ python check("variantMap", r'QMap<QString, QVariant> \(size = 2\)')
 # QVariantList
 python check("variantList", r'QList<QVariant> \(size = 4\)')
 
-# QVector
-python check("vector", r'QVector<double> \(size = 3\)')
+# QVector (Qt5: QVector<T>, Qt6: QList<T>)
+python check("vector", r'(QVector<double>|QList<double>) \(size = 3\)')
 
 # QUrl
 python check("url", r'https://qt\.io')

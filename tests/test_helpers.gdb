@@ -22,11 +22,11 @@ def check(expr, pattern):
         # execute the print command and capture output
         output = gdb.execute(f"print {expr}", to_string=True)
     except Exception as e:
-        print(f"\n{RED}[TEST FAIL]{RESET} GDB Error evaluating '{expr}': {e}")
         # Allow failure for now if variable possibly doesn't exist
         if "No symbol" in str(e):
              print(f"{YELLOW}[TEST SKIP]{RESET} Symbol '{expr}' not found")
              return
+        print(f"\n{RED}[TEST FAIL]{RESET} GDB Error evaluating '{expr}': {e}")
         sys.exit(1)
 
     # Check if pattern matches the output
