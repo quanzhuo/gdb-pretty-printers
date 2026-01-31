@@ -12,16 +12,20 @@ AUTOLOAD_SCRIPT="$PROJECT_ROOT/autoload.py"
 
 echo "=== Running Qt GDB Pretty Printer Test ==="
 
-# 1. Build the test executable
-echo "[Build] Compiling test case..."
-cmake -S "$SCRIPT_DIR" -B "$SCRIPT_DIR/build" -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles"
-cmake --build "$SCRIPT_DIR/build"
-
-# Check if executable exists
+# 1. Check if executable exists
 EXE_PATH="$SCRIPT_DIR/build/QtTypes"
 if [ ! -f "$EXE_PATH" ]; then
-    echo "[ERROR] Executable not found: $EXE_PATH"
-    exit 1
+    echo "[Build] Executable not found, compiling test case..."
+    cmake -S "$SCRIPT_DIR" -B "$SCRIPT_DIR/build" -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles"
+    cmake --build "$SCRIPT_DIR/build"
+    
+    # Verify build succeeded
+    if [ ! -f "$EXE_PATH" ]; then
+        echo "[ERROR] Build failed: Executable not found: $EXE_PATH"
+        exit 1
+    fi
+else
+    echo "[Build] Using existing executable: $EXE_PATH"
 fi
 
 # 2. Run GDB with pretty printers
