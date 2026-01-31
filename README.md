@@ -1,8 +1,8 @@
 # GDB Pretty Printers Collection
 
-This repository houses a collection of GDB pretty printers for various C++ libraries (e.g., Qt).
+This repository houses a collection of GDB pretty printers for various C++ libraries.
 
-It is primarily maintained for use with the **kylinideteam.cppdebug** VS Code extension, but can be used in any GDB environment. Its main feature is an intelligent autoloading mechanism that registers specific printers only when the corresponding library is loaded into the debug session.
+It is primarily maintained for use with the **kylinideteam.cppdebug** VS Code extension, but can be used in any GDB environment. Its main feature is an autoloading mechanism that registers specific printers only when the corresponding library is loaded into the debug session.
 
 ## Architecture
 
@@ -12,18 +12,52 @@ When a shared library (e.g., `Qt6Core.dll` or `libQt6Core.so`) is loaded, the sc
 
 ## Usage
 
-To use these printers in GDB, simply source the `autoload.py` script.
+### 1. Use with kylinideteam.cppdebug Extension (Recommended)
 
-In VS Code (`launch.json`):
+These pretty printers are **already bundled** with the [kylinideteam.cppdebug](https://marketplace.visualstudio.com/items?itemName=kylinideteam.cppdebug) VS Code extension. Simply install the extension and use it to debug your C++ programs - the printers will be loaded automatically.
+
+No additional configuration is required!
+
+### 2. Use with Microsoft C/C++ Extension
+
+If you're using the official Microsoft C/C++ extension, you can manually load the printers by adding a setup command to your `launch.json`:
+
 ```json
-"setupCommands": [
-    {
-        "description": "Load GDB Pretty Printers",
-        "text": "source /path/to/gdb-pretty-printers/autoload.py",
-        "ignoreFailures": false
-    }
-]
+{
+    "name": "C++ Debug",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${workspaceFolder}/your_program",
+    "setupCommands": [
+        {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+        },
+        {
+            "description": "Load GDB Pretty Printers",
+            "text": "source /path/to/gdb-pretty-printers/autoload.py",
+            "ignoreFailures": false
+        }
+    ]
+}
 ```
+
+Replace `/path/to/gdb-pretty-printers/` with the actual path where you cloned this repository.
+
+### 3. Use Directly in GDB
+
+To use these printers in a standalone GDB session, source the `autoload.py` script at startup or in your `.gdbinit` file:
+
+```bash
+# In GDB command line
+(gdb) source /path/to/gdb-pretty-printers/autoload.py
+
+# Or add to your ~/.gdbinit
+echo "source /path/to/gdb-pretty-printers/autoload.py" >> ~/.gdbinit
+```
+
+Once loaded, the printers will be automatically activated when the corresponding libraries are loaded during debugging.
 
 ## Adding New Printers
 
